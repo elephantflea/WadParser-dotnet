@@ -35,7 +35,7 @@ namespace WadReader
 
             foreach(var lump in wad.Lumps)
             {
-                Console.WriteLine(lump.Name)
+                Console.WriteLine(lump.Name);
             }
 
             return 0;
