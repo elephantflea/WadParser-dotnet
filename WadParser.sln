@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BD39CB51-85C8-47B8-A62C-D56B3201E0DE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WadParser", "WadParser\WadParser.csproj", "{6388D983-2318-406C-A5F8-0D9724229658}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WadParserTests", "WadParserTests\WadParserTests.csproj", "{347C1F39-2352-4CB6-9BD9-8DF4D786EEF8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6388D983-2318-406C-A5F8-0D9724229658}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6388D983-2318-406C-A5F8-0D9724229658}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6388D983-2318-406C-A5F8-0D9724229658}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6388D983-2318-406C-A5F8-0D9724229658}.Release|Any CPU.Build.0 = Release|Any CPU
+		{347C1F39-2352-4CB6-9BD9-8DF4D786EEF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{347C1F39-2352-4CB6-9BD9-8DF4D786EEF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{347C1F39-2352-4CB6-9BD9-8DF4D786EEF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{347C1F39-2352-4CB6-9BD9-8DF4D786EEF8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{347C1F39-2352-4CB6-9BD9-8DF4D786EEF8} = {BD39CB51-85C8-47B8-A62C-D56B3201E0DE}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {66F0EA26-3026-4B26-B7FA-1EE8DF5394C1}
+	EndGlobalSection
+EndGlobal

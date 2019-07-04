@@ -1,0 +1,77 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+	<TestProjectType>UnitTest</TestProjectType>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>nz.doom.WadParserTests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="TestResources\BadDirectoryLength.wad" />
+    <None Remove="TestResources\BadDirectoryOffset.wad" />
+    <None Remove="TestResources\doom1.wad" />
+    <None Remove="TestResources\IWAD.txt" />
+    <None Remove="TestResources\opposing-force-spraypaint.wad" />
+    <None Remove="TestResources\PWAD.txt" />
+    <None Remove="TestResources\quake-gfx.wad" />
+    <None Remove="TestResources\TestBytes.txt" />
+    <None Remove="TestResources\TooManyLumps.wad" />
+    <None Remove="TestResources\UNKNOWN.txt" />
+    <None Remove="TestResources\WAD2.txt" />
+    <None Remove="TestResources\WAD3.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WadParser\WadParser.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="TestResources\BadDirectoryLength.wad">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestResources\BadDirectoryOffset.wad">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestResources\doom1.wad">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestResources\IWAD.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestResources\opposing-force-spraypaint.wad">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestResources\PWAD.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestResources\quake-gfx.wad">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestResources\TooManyLumps.wad">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestResources\UNKNOWN.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestResources\WAD2.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestResources\WAD3.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="TestResources\TestBytes.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

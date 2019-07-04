@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<OutputType>Library</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RootNamespace>nz.doom.WadParser</RootNamespace>
+    <Authors>elephantflea</Authors>
+    <PackageProjectUrl>https://elephantflea.pw</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/elephantflea/WadParser-dotnet</RepositoryUrl>
+    <Description>A C# .NET Core helper library to parse WAD files and extract lumps contained in Doom, Quake and Half-life WAD files.</Description>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+</Project>
