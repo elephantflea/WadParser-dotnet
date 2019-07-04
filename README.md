@@ -15,7 +15,7 @@ Based on:
   * Half-Life, Opposing Force, Blue Shift
   
 ## Usage
-```
+```csharp
 using System;
 using nz.doom.WadParser;
 
