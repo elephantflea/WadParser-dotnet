@@ -13,5 +13,35 @@ Based on:
   * Quake
 * WAD3
   * Half-Life, Opposing Force, Blue Shift
+  
+## Usage
+```
+using System;
+using nz.doom.WadParser;
+
+namespace WadReader
+{
+    class Program
+    {
+        static int Main(string[] args)
+        {
+            if(args == null || args.Length != 1)
+            {
+                Console.Error.WriteLine("WAD file required");
+                return 2;
+            }
+
+            Wad wad = WadParser.Parse(args[0]);
+
+            foreach(var lump in wad.Lumps)
+            {
+                Console.WriteLine(lump.Name)
+            }
+
+            return 0;
+        }
+    }
+}
+```
 ### See also
 Also available for Java https://github.com/elephantflea/WadParser
