@@ -63,12 +63,12 @@ namespace WadReader
             Wad wad = WadParser.Parse(args[0], false);
 
             Lump endoomLump = wad.GetLumpByName("ENDOOM");
-			
-			if( endoomLump != null )
-			{
-				WadParser.ReadBytesIntoLump(args[0], endoomLump);
-				Console.WriteLine($"{endoomLump.Name} is {endoomLump.Bytes.Length} bytes long");
-			}
+            
+            if( endoomLump != null )
+            {
+                WadParser.ReadBytesIntoLump(args[0], endoomLump);
+                Console.WriteLine($"{endoomLump.Name} is {endoomLump.Bytes.Length} bytes long");
+            }
             return 0;
         }
     }
