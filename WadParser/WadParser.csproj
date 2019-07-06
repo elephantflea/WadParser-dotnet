@@ -7,8 +7,12 @@
     <Authors>elephantflea</Authors>
     <PackageProjectUrl>https://elephantflea.pw</PackageProjectUrl>
     <RepositoryUrl>https://github.com/elephantflea/WadParser-dotnet</RepositoryUrl>
-    <Description>A C# .NET Core helper library to parse WAD files and extract lumps contained in Doom, Quake and Half-life WAD files.</Description>
+    <Description>A C# .NET Core helper library to parse WAD files and extract lumps contained in Doom, Quake and Half-life engine WAD files.</Description>
     <RepositoryType>git</RepositoryType>
+    <PackageTags>doom quake heretic half-life hexen strife wad pwad iwad wad3 wad2</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Version>1.1.0</Version>
+    <PackageReleaseNotes>Added in ability to read the WAD file without reading in all the lump bytes. When the bytes aren't read in they can then be read in using the ReadBytesIntoLump functions</PackageReleaseNotes>
   </PropertyGroup>
 
 </Project>

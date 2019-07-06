@@ -12,7 +12,7 @@ namespace nz.doom.WadParser.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void NullWadPathTest()
         {
-            WadParser.Parse(null);
+            WadParser.Parse((string)null);
         }
 
         [TestMethod]

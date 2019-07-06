@@ -43,5 +43,36 @@ namespace WadReader
     }
 }
 ```
+
+```csharp
+using System;
+using nz.doom.WadParser;
+
+namespace WadReader
+{
+    class Program
+    {
+        static int Main(string[] args)
+        {
+            if(args == null || args.Length != 1)
+            {
+                Console.Error.WriteLine("WAD file required");
+                return 2;
+            }
+
+            Wad wad = WadParser.Parse(args[0], false);
+
+            Lump endoomLump = wad.GetLumpByName("ENDOOM");
+			
+			if( endoomLump != null )
+			{
+				WadParser.ReadBytesIntoLump(args[0], endoomLump);
+				Console.WriteLine($"{endoomLump.Name} is {endoomLump.Bytes.Length} bytes long");
+			}
+            return 0;
+        }
+    }
+}
+```
 ### See also
 Also available for Java https://github.com/elephantflea/WadParser

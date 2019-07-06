@@ -100,9 +100,14 @@ namespace nz.doom.WadParser
         public bool IsCompressed { get; set; }
 
         /// <summary>
-        /// Whether or not this lump has been determined to have been corrupted.
+        /// Whether or not this lump has been determined to have been corrupted (either name or bytes are corrupt).
         /// </summary>
         public bool IsCorrupt { get; set; }
+
+        /// <summary>
+        /// Whether or not this lump's bytes are corrupt
+        /// </summary>
+        public bool IsCorruptBytes { get; set; }
 
         /// <summary>
         /// Alias of <see cref="Name"/>
