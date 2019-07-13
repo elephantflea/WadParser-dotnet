@@ -117,12 +117,15 @@ namespace nz.doom.WadParser
                 byte[] lumpNameBytes = ReadBytesAtPosition(wadFileStream, position + nameOffset, nameSize);
 
                 string lumpName = Encoding.ASCII.GetString(lumpNameBytes, 0, lumpNameBytes.Length);
-
+                                
                 var nullOffset = lumpName.IndexOf("\0");
-                if (nullOffset > -1)
+
+                if (nullOffset > 0)
                 {
                     lumpName = lumpName.Substring(0, nullOffset);
                 }
+
+                lumpName = lumpName.Trim();
 
                 Lump lump = new Lump
                 {
