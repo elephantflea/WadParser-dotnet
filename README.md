@@ -15,6 +15,7 @@ Based on:
   * Half-Life, Opposing Force, Blue Shift
   
 ## Usage
+Available as a NuGet package at https://www.nuget.org/packages/WadParser/
 ```csharp
 using System;
 using nz.doom.WadParser;
