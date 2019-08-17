@@ -11,8 +11,8 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>doom quake heretic half-life hexen strife wad pwad iwad wad3 wad2</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.1.1</Version>
-    <PackageReleaseNotes>Bug fix in lump names when run on non-Windows machines</PackageReleaseNotes>
+    <Version>1.1.2</Version>
+    <PackageReleaseNotes>Changed how the lump names are parsed</PackageReleaseNotes>
   </PropertyGroup>
 
 </Project>

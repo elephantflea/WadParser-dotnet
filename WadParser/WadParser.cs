@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace nz.doom.WadParser
 {
@@ -116,14 +117,17 @@ namespace nz.doom.WadParser
 
                 byte[] lumpNameBytes = ReadBytesAtPosition(wadFileStream, position + nameOffset, nameSize);
 
-                string lumpName = Encoding.ASCII.GetString(lumpNameBytes, 0, lumpNameBytes.Length);
-                                
-                var nullOffset = lumpName.IndexOf("\0");
-
-                if (nullOffset > 0)
+                var nameLength = lumpNameBytes.Length;
+                for (int i = 0; i < lumpNameBytes.Length; i++)
                 {
-                    lumpName = lumpName.Substring(0, nullOffset);
+                    if(lumpNameBytes[i] == 0)
+                    {
+                        nameLength = i;
+                        break;
+                    }
                 }
+
+                string lumpName = Encoding.ASCII.GetString(lumpNameBytes, 0, nameLength);
 
                 lumpName = lumpName.Trim();
 
