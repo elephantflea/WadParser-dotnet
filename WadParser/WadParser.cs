@@ -48,17 +48,22 @@ namespace nz.doom.WadParser
         public static readonly int HEADER_SIZE = 12;
 
         /// <summary>
-        /// Parse the given WAD file located at <paramref name="wadFileStream"/> into a <see cref="Wad"/> object. If <paramref name="readBytes"/> is false
+        /// Parse the given WAD file located at <paramref name="wadStream"/> into a <see cref="Wad"/> object. If <paramref name="readBytes"/> is false
         /// then the bytes in each lump can be read using <see cref="ReadBytesIntoLump(FileStream, Lump)"/>.
         /// </summary>
-        /// <param name="wadFileStream">The WAD FileStream</param>
+        /// <param name="wadStream">The WAD FileStream</param>
         /// <param name="readBytes">Should the bytes be parsed into the lump object or not. Defaults to <c>true</c></param>
         /// <exception cref="WadParseException">Thrown if the WAD is in an invalid format</exception>
         /// <returns>The parsed WAD file with each of it's <see cref="Lump"/>s</returns>
-        public static Wad Parse(FileStream wadFileStream, bool readBytes = true)
+        public static Wad Parse(Stream wadStream, bool readBytes = true)
         {
+            if (!wadStream.CanSeek)
+            {
+                throw new ArgumentException("Input stream must be seekable.", nameof(wadStream));
+            }
+
             // read first 4 bytes to determine the WAD type
-            var wadTypeBytes = ReadBytesAtPosition(wadFileStream, 0, 4);
+            var wadTypeBytes = ReadBytesAtPosition(wadStream, 0, 4);
             string wadType = Identifier.GetWadType(wadTypeBytes);
 
             int dirSize = WAD_DIRECTORY_SIZE;
@@ -80,18 +85,18 @@ namespace nz.doom.WadParser
                     throw new WadParseException($"Invalid WAD type '{wadType}'. Type must be one of: PWAD, IWAD, WAD2 or WAD3");
             }
 
-            int lumpCount = BitConverter.ToInt32(ReadBytesAtPosition(wadFileStream, 4, 4));
+            int lumpCount = BitConverter.ToInt32(ReadBytesAtPosition(wadStream, 4, 4), 0);
 
             if (lumpCount > 65536 || lumpCount < 0)
             {
                 throw new WadParseException($"Invalid number of lumps listed in header. Max supported 65536, found {lumpCount}");
             }
 
-            int directoryOffset = BitConverter.ToInt32(ReadBytesAtPosition(wadFileStream, 8, 4));
+            int directoryOffset = BitConverter.ToInt32(ReadBytesAtPosition(wadStream, 8, 4), 0);
 
-            if (directoryOffset > wadFileStream.Length)
+            if (directoryOffset > wadStream.Length)
             {
-                throw new WadParseException($"Directory offset {directoryOffset} is beyond the WAD filesize of {wadFileStream.Length}");
+                throw new WadParseException($"Directory offset {directoryOffset} is beyond the WAD filesize of {wadStream.Length}");
             }
 
             if (directoryOffset < HEADER_SIZE)
@@ -99,23 +104,29 @@ namespace nz.doom.WadParser
                 throw new WadParseException($"Directory offset {directoryOffset} is before the WAD header");
             }
 
-            if ((directoryOffset + (dirSize * lumpCount)) > wadFileStream.Length)
+            if ((directoryOffset + (dirSize * lumpCount)) > wadStream.Length)
             {
                 throw new WadParseException($"Directory goes off the end of the WAD file");
             }
 
             var lumpEntryNumber = -1;
-            var maxLumpSize = wadFileStream.Length - (dirSize * lumpCount);
+            var maxLumpSize = wadStream.Length - (dirSize * lumpCount);
 
-            var wad = new Wad(wadFileStream.Name, (int)wadFileStream.Length, Path.GetFileName(wadFileStream.Name));
+            Wad wad;
+            if (wadStream is FileStream wadFileStream)
+            {
+                wad = new Wad(wadFileStream.Name, (int)wadStream.Length, Path.GetFileName(wadFileStream.Name));
+            } else {
+                wad = new Wad(null, (int)wadStream.Length, null);
+            }
             wad.WadType = wadType;
 
             for (int position = directoryOffset; position < (directoryOffset + (lumpCount * dirSize)); position += dirSize)
             {
-                int lumpOffset = BitConverter.ToInt32(ReadBytesAtPosition(wadFileStream, position, 4));
+                int lumpOffset = BitConverter.ToInt32(ReadBytesAtPosition(wadStream, position, 4), 0);
                 lumpEntryNumber++;
 
-                byte[] lumpNameBytes = ReadBytesAtPosition(wadFileStream, position + nameOffset, nameSize);
+                byte[] lumpNameBytes = ReadBytesAtPosition(wadStream, position + nameOffset, nameSize);
 
                 var nameLength = lumpNameBytes.Length;
                 for (int i = 0; i < lumpNameBytes.Length; i++)
@@ -135,7 +146,7 @@ namespace nz.doom.WadParser
                 {
                     Offset = lumpOffset,
                     Position = lumpEntryNumber,
-                    Size = BitConverter.ToInt32(ReadBytesAtPosition(wadFileStream, position + 4, 4))
+                    Size = BitConverter.ToInt32(ReadBytesAtPosition(wadStream, position + 4, 4), 0)
                 };
 
                 if (String.IsNullOrEmpty(lumpName))
@@ -152,8 +163,8 @@ namespace nz.doom.WadParser
                 {
                     case "WAD2":
                     case "WAD3":
-                        lump.LumpType = BitConverter.ToInt16(ReadBytesAtPosition(wadFileStream, position + 12, 2));
-                        lump.IsCompressed = BitConverter.ToInt16(ReadBytesAtPosition(wadFileStream, position + 14, 2)) == 1;
+                        lump.LumpType = BitConverter.ToInt16(ReadBytesAtPosition(wadStream, position + 12, 2), 0);
+                        lump.IsCompressed = BitConverter.ToInt16(ReadBytesAtPosition(wadStream, position + 14, 2), 0) == 1;
                         break;
                 }
 
@@ -169,7 +180,7 @@ namespace nz.doom.WadParser
                 }
                 else if (readBytes)
                 {
-                    lump.Bytes = ReadBytesAtPosition(wadFileStream, lumpOffset, lump.Size);                    
+                    lump.Bytes = ReadBytesAtPosition(wadStream, lumpOffset, lump.Size);                    
                 }
 
                 wad.AddLump(lump);
@@ -194,28 +205,28 @@ namespace nz.doom.WadParser
                 throw new ArgumentNullException(nameof(wadPath));
             }
 
-            using (FileStream wadFileStream = File.OpenRead(wadPath))
+            using (FileStream wadStream = File.OpenRead(wadPath))
             {
-                return Parse(wadFileStream, readBytes);
+                return Parse(wadStream, readBytes);
             }
         }
 
         /// <summary>
-        /// Reads <paramref name="length"/> number of bytes from the <paramref name="fileStream"/> starting at <paramref name="position"/>.
+        /// Reads <paramref name="length"/> number of bytes from the <paramref name="stream"/> starting at <paramref name="position"/>.
         /// </summary>
-        /// <param name="fileStream">The file stream to read the bytes from</param>
+        /// <param name="stream">The stream to read the bytes from</param>
         /// <param name="position">Where in the stream should the bytes be read from</param>
         /// <param name="length">How many bytes to read</param>
-        /// <returns>The array of bytes read from <paramref name="fileStream"/></returns>
-        public static byte[] ReadBytesAtPosition(FileStream fileStream,int position = 0,int length = 1)
+        /// <returns>The array of bytes read from <paramref name="stream"/></returns>
+        public static byte[] ReadBytesAtPosition(Stream stream,int position = 0,int length = 1)
         {
             var bytes = new byte[length];
 
-            fileStream.Position = position;
+            stream.Position = position;
             int offset = 0;
 
             int read;
-            while ((read = fileStream.Read(bytes, offset, bytes.Length - offset)) > 0 && offset < length)
+            while ((read = stream.Read(bytes, offset, bytes.Length - offset)) > 0 && offset < length)
             {
                 offset += read;
             }
@@ -224,12 +235,12 @@ namespace nz.doom.WadParser
         }
 
         /// <summary>
-        /// Read the bytes for the <paramref name="lumpToRead"/> passed in from <paramref name="wadFileStream"/>.
+        /// Read the bytes for the <paramref name="lumpToRead"/> passed in from <paramref name="wadStream"/>.
         /// </summary>
-        /// <param name="wadFileStream">The WAD file stream to read the bytes from.</param>
-        /// <param name="lumpToRead">Which lump should be read from <paramref name="wadFileStream"/>.</param>
+        /// <param name="wadStream">The WAD stream to read the bytes from.</param>
+        /// <param name="lumpToRead">Which lump should be read from <paramref name="wadStream"/>.</param>
         /// <returns><paramref name="lumpToRead"/> with the <see cref="Lump.Bytes"/> read in</returns>
-        public static Lump ReadBytesIntoLump(FileStream wadFileStream, Lump lumpToRead)
+        public static Lump ReadBytesIntoLump(Stream wadStream, Lump lumpToRead)
         {
             if ((lumpToRead.Bytes == null && lumpToRead.IsCorruptBytes) || lumpToRead.Size == 0)
             {
@@ -237,7 +248,7 @@ namespace nz.doom.WadParser
                 return lumpToRead;
             }
 
-            byte[] bytes = ReadBytesAtPosition(wadFileStream, lumpToRead.Offset, lumpToRead.Size);
+            byte[] bytes = ReadBytesAtPosition(wadStream, lumpToRead.Offset, lumpToRead.Size);
 
             lumpToRead.Bytes = bytes;
 
