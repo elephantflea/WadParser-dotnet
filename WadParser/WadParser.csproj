@@ -2,7 +2,7 @@
 
   <PropertyGroup>
 	<OutputType>Library</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>nz.doom.WadParser</RootNamespace>
     <Authors>elephantflea</Authors>
     <PackageProjectUrl>https://elephantflea.pw</PackageProjectUrl>

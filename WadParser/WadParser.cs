@@ -80,14 +80,14 @@ namespace nz.doom.WadParser
                     throw new WadParseException($"Invalid WAD type '{wadType}'. Type must be one of: PWAD, IWAD, WAD2 or WAD3");
             }
 
-            int lumpCount = BitConverter.ToInt32(ReadBytesAtPosition(wadFileStream, 4, 4));
+            int lumpCount = BitConverter.ToInt32(ReadBytesAtPosition(wadFileStream, 4, 4), 0);
 
             if (lumpCount > 65536 || lumpCount < 0)
             {
                 throw new WadParseException($"Invalid number of lumps listed in header. Max supported 65536, found {lumpCount}");
             }
 
-            int directoryOffset = BitConverter.ToInt32(ReadBytesAtPosition(wadFileStream, 8, 4));
+            int directoryOffset = BitConverter.ToInt32(ReadBytesAtPosition(wadFileStream, 8, 4), 0);
 
             if (directoryOffset > wadFileStream.Length)
             {
@@ -112,7 +112,7 @@ namespace nz.doom.WadParser
 
             for (int position = directoryOffset; position < (directoryOffset + (lumpCount * dirSize)); position += dirSize)
             {
-                int lumpOffset = BitConverter.ToInt32(ReadBytesAtPosition(wadFileStream, position, 4));
+                int lumpOffset = BitConverter.ToInt32(ReadBytesAtPosition(wadFileStream, position, 4), 0);
                 lumpEntryNumber++;
 
                 byte[] lumpNameBytes = ReadBytesAtPosition(wadFileStream, position + nameOffset, nameSize);
@@ -135,7 +135,7 @@ namespace nz.doom.WadParser
                 {
                     Offset = lumpOffset,
                     Position = lumpEntryNumber,
-                    Size = BitConverter.ToInt32(ReadBytesAtPosition(wadFileStream, position + 4, 4))
+                    Size = BitConverter.ToInt32(ReadBytesAtPosition(wadFileStream, position + 4, 4), 0)
                 };
 
                 if (String.IsNullOrEmpty(lumpName))
@@ -152,8 +152,8 @@ namespace nz.doom.WadParser
                 {
                     case "WAD2":
                     case "WAD3":
-                        lump.LumpType = BitConverter.ToInt16(ReadBytesAtPosition(wadFileStream, position + 12, 2));
-                        lump.IsCompressed = BitConverter.ToInt16(ReadBytesAtPosition(wadFileStream, position + 14, 2)) == 1;
+                        lump.LumpType = BitConverter.ToInt16(ReadBytesAtPosition(wadFileStream, position + 12, 2), 0);
+                        lump.IsCompressed = BitConverter.ToInt16(ReadBytesAtPosition(wadFileStream, position + 14, 2), 0) == 1;
                         break;
                 }
 
